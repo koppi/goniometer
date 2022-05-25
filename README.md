@@ -1,6 +1,6 @@
 ![Overview](goniometer.png)
 
-##Build, install and run
+### Build, install and run
 
 ```bash
 git clone https://github.com/koppi/goniometer
