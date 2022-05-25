@@ -1,3 +1,5 @@
+![Overview](goniometer.png)
+
 ##Build, install and run
 
 ```bash
