@@ -7,6 +7,7 @@
 #include <dirent.h>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "config.h"
 #include "debug.h"
@@ -53,9 +54,19 @@ static bool directory_exists(const char *path) {
 }
 #endif
 
-int
-SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius)
-{
+#include "icons/goniometer.cdata"
+void SDL_SetWindowIconMemory(SDL_Window *window) {
+    SDL_RWops * z = SDL_RWFromMem(goniometer_png, sizeof(goniometer_png));
+    SDL_Surface *window_icon_surface = IMG_Load_RW(z, 1);
+    if (window_icon_surface == NULL) {
+        fprintf(stderr, "Error: unable to load application icon: '%s'.\n", SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
+    SDL_SetWindowIcon(window, window_icon_surface);
+    SDL_FreeSurface(window_icon_surface);
+}
+
+int SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius) {
     int offsetx, offsety, d;
     int status;
 
@@ -289,6 +300,7 @@ int main(int argc, char** argv) {
     window = SDL_CreateWindow("goniometer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen_width, screen_height, SDL_WINDOW_SHOWN);
     //SDL_SetWindowResizable(window, true);
     SDL_SetWindowAlwaysOnTop(window, true);
+    SDL_SetWindowIconMemory(window);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
