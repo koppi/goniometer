@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=Goniometer
+GenericName=Goniometer
+Comment=
+Icon=/usr/share/icons/hicolor/512x512/apps/goniometer.png
+
+Type=Application
+Categories=Audio
+
+Exec=goniometer
+Terminal=false

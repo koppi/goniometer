@@ -44,9 +44,15 @@ install: $(APP)
 	strip $(APP)
 	mkdir -p $(INSTALL_PREFIX)$(PREFIX)/bin
 	install -m 0755 $(APP) $(INSTALL_PREFIX)$(PREFIX)/bin
+	mkdir -p $(INSTALL_PREFIX)$(PREFIX)/share/icons/hicolor/512x512/apps
+	install -m 0664 goniometer.png     $(INSTALL_PREFIX)$(PREFIX)/share/icons/hicolor/512x512/apps
+	mkdir -p $(INSTALL_PREFIX)$(PREFIX)/share/applications
+	install -m 0664 goniometer.desktop $(INSTALL_PREFIX)$(PREFIX)/share/applications
 
 uninstall:
 	rm $(INSTALL_PREFIX)$(PREFIX)/bin/$(APP)
+	rm $(INSTALL_PREFIX)$(PREFIX)/share/icons/hicolor/512x512/apps/goniometer.png
+	rm $(INSTALL_PREFIX)$(PREFIX)/share/applications/goniometer.desktop
 
 clean:
 	rm -f *~ *.o $(APP)
