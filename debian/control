@@ -3,7 +3,7 @@ Section: sound
 Priority: optional
 Maintainer: Jakob Flierl <jakob.flierl@gmail.com>
 Uploaders: Jakob Flierl <jakob.flierl@gmail.com>
-Build-Depends: debhelper (>= 9), pkg-config, libsdl2-dev, libsdl2-image-dev
+Build-Depends: debhelper (>= 9), pkg-config, libsdl2-dev, libsdl2-image-dev, portaudio19-dev, libpulse-dev, libsndio-dev
 Standards-Version: 3.9.7
 Homepage: https://github.com/koppi/goniometer
 Vcs-Git: git://github.com/koppi/goniometer.git
