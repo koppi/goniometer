@@ -133,32 +133,40 @@ void execute(double *in, unsigned int new_samples, struct audio_data audio, int 
         for (unsigned int i = 0; i < new_samples - 1; i++) {
 #define DX (screen_width  / 2)
 #define DY (screen_height / 2)
-#define deg2rad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
+            float scale = 0.004; //XXX
+            float x = in[i * 2    ] * scale;
+            float y = in[i * 2 + 1] * scale;
+
+            double radius = sqrt((x * x) + (y * y));
+            double angle = atan(y/x);
+
+            if ((x < 0 && y > 0) || (x < 0 && y < 0)) {
+                angle += 3.14159265; // Pi radians = 180 degrees
+            } else if (x > 0 && y < 0) {
+                angle += 6.28318530; // 2Pi radians = 360 degrees
+            }
+            // atan() will return zero if either of our coordinates is zero.
+            // Correct for this by manually setting the angle.
+            if (x == 0) {
+                angle = y > 0 ? 1.57079633 : 4.71238898; // 90 or 270 degrees
+            } else if (y == 0) {
+                angle = x > 0 ? 0 : 3.14159265; // 0 or 180 degrees
+            }
+            // Rotate coordinate by 45 degrees counter clockwise
+            angle += 0.78539816;
             
-            float theta = deg2rad(180);
-            
-            float scale = 0.01; //XXX
-            float px1 = DX + in[i * 2    ] * scale;
-            float py1 = DY + in[i * 2 + 1] * scale;
-            //float px2 = DX + in[(i+1) * 2    ] * scale;
-            //float py2 = DY + in[(i+1) * 2 + 1] * scale;
-            
-            float ox = DX;
-            float oy = DY;
-            
-            float pnx1 = cos(theta) * (px1-ox) - sin(theta) * (py1-oy) + ox;
-            float pny1 = sin(theta) * (px1-ox) + cos(theta) * (py1-oy) + oy;
-            //float pnx2 = cos(theta) * (px2-ox) - sin(theta) * (py2-oy) + ox;
-            //float pny2 = sin(theta) * (px2-ox) + cos(theta) * (py2-oy) + oy;
+            // Convert polar coordinate back to cartesian coordinate.
+            double xRotated = DX + radius * cos(angle);
+            double yRotated = DY + radius * sin(angle);
             
             SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
             //SDL_RenderDrawLine(renderer, pnx1, pny1, pnx2, pny2);
             
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 16);
-            SDL_RenderFillCircle(renderer, pnx1, pny1, 2);
+            SDL_RenderFillCircle(renderer, xRotated, yRotated, 2);
             
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 32);
-            SDL_Rect rect3 = { pnx1, pny1, 1, 1 };
+            SDL_Rect rect3 = { xRotated, yRotated, 1, 1 };
             SDL_RenderFillRect(renderer, &rect3);
         }
     }
