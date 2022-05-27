@@ -5,7 +5,7 @@ APP := goniometer
 
 # comment out to disable SDL GUI
 SDL_CFLAGS := -DHAVE_SDL $(shell pkg-config --cflags sdl2 SDL2_ttf SDL2_image)
-SDL_LDLIBS := $(shell pkg-config --libs sdl2 SDL2_ttf SDL2_image)
+SDL_LDLIBS := $(shell pkg-config --libs sdl2 SDL2_image)
 
 # comment out to disable ALSA input
 ALSA_CFLAGS := -DHAVE_ALSA $(shell pkg-config --cflags alsa)
