@@ -21,3 +21,5 @@ dpkg-buildpackage -b -rfakeroot -us -uc
 sudo dpkg -i ../goniometer*.deb
 sudo apt -f install
 ```
+
+– Tested on Debian/Sid and Ubuntu 22.04 [![.github/workflows/ubuntu.yml](actions/workflows/ubuntu.yml/badge.svg)](actions/workflows/ubuntu.yml).
