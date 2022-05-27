@@ -22,10 +22,10 @@ jobs:
       run: dpkg-buildpackage -b -rfakeroot -us -uc
 
     - name: install the package
-      run: sudo dpkg -i ../rm501*deb
+      run: sudo dpkg -i ../goniometer*deb
 
     - name: install package dependencies
       run: sudo apt -f install
 
     - name: run lintian
-      run: lintian ../rm501*deb | lintian-info
+      run: lintian ../goniometer*deb | lintian-info
