@@ -1,3 +1,9 @@
+goniometer
+debian/.debhelper/
+debian/files
+debian/goniometer.substvars
+debian/goniometer/
+
 # Prerequisites
 *.d
 
