@@ -4,6 +4,9 @@ debian/files
 debian/goniometer.substvars
 debian/goniometer/
 
+build
+.vscode
+
 # Prerequisites
 *.d
 

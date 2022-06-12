@@ -15,7 +15,9 @@
 
 #include "alsa.h"
 #include "common.h"
+#ifndef __WIN32__
 #include "fifo.h"
+#endif
 #include "portaudio.h"
 #include "pulse.h"
 #include "sndio.h"
@@ -111,7 +113,7 @@ int SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius) {
 
 void execute(double *in, unsigned int new_samples, struct audio_data audio, int frame_time) {
     
-    //debug("new_samples = % 8d\n", new_samples);
+    debug("new_samples = % 8d\n", new_samples);
 
     // do not overflow
     if (new_samples > (unsigned int)audio.input_buffer_size) {
@@ -200,13 +202,16 @@ int main(int argc, char** argv) {
     (void)argc;
     (void)argv;
 
+    debug("1\n");
+
     struct audio_data audio;
     memset(&audio, 0, sizeof(audio));
 
     // TODO make this a parameter
-    int input = INPUT_PULSE;
+    //int input = INPUT_PULSE;
     //int input = INPUT_ALSA;
-    char* audio_source = "auto"; // pulse
+    int input = INPUT_PORTAUDIO;
+    char* audio_source = "list"; // pulse
     //char* audio_source = "hw:Loopback,1"; // alsa
     audio.source = malloc(1 + strlen(audio_source));
     strcpy(audio.source, audio_source);
@@ -224,7 +229,7 @@ int main(int argc, char** argv) {
     
     audio.terminate = 0;
     
-    //debug("starting audio thread\n");
+    debug("starting audio thread\n");
 
     pthread_t p_thread;
 	int timeout_counter = 0;
@@ -266,12 +271,14 @@ int main(int argc, char** argv) {
         debug("got format: %d and rate %d\n", audio.format, audio.rate);
         break;
 #endif
+#ifndef __WIN32__
     case INPUT_FIFO:
         // starting fifomusic listener                                                                                                      
         thr_id = pthread_create(&p_thread, NULL, input_fifo, (void *)&audio);
         audio.rate = 44100;
         audio.format = 16;
         break;
+#endif
 #ifdef HAVE_PULSE
     case INPUT_PULSE:
         if (strcmp(audio.source, "auto") == 0) {
@@ -298,7 +305,7 @@ int main(int argc, char** argv) {
         exit(EXIT_FAILURE); // Can't happen.
     }
 
-    //debug("audio format: %d rate: %d channels: %d\n", audio.format, audio.rate, audio.channels);
+    debug("audio format: %d rate: %d channels: %d\n", audio.format, audio.rate, audio.channels);
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         debug("SDL_Init failed: %s\n", SDL_GetError());

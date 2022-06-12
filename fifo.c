@@ -2,6 +2,8 @@
 #include "common.h"
 
 #include <time.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 int open_fifo(const char *path) {
     int fd = open(path, O_RDONLY);
